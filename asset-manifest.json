@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/Face-Mask-Detection-Web/static/css/main.d3146523.chunk.css",
+    "main.js": "/Face-Mask-Detection-Web/static/js/main.6383a6d8.chunk.js",
+    "main.js.map": "/Face-Mask-Detection-Web/static/js/main.6383a6d8.chunk.js.map",
+    "runtime-main.js": "/Face-Mask-Detection-Web/static/js/runtime-main.717dcbea.js",
+    "runtime-main.js.map": "/Face-Mask-Detection-Web/static/js/runtime-main.717dcbea.js.map",
+    "static/js/2.526dcdc5.chunk.js": "/Face-Mask-Detection-Web/static/js/2.526dcdc5.chunk.js",
+    "static/js/2.526dcdc5.chunk.js.map": "/Face-Mask-Detection-Web/static/js/2.526dcdc5.chunk.js.map",
+    "index.html": "/Face-Mask-Detection-Web/index.html",
+    "static/css/main.d3146523.chunk.css.map": "/Face-Mask-Detection-Web/static/css/main.d3146523.chunk.css.map",
+    "static/js/2.526dcdc5.chunk.js.LICENSE.txt": "/Face-Mask-Detection-Web/static/js/2.526dcdc5.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.717dcbea.js",
+    "static/js/2.526dcdc5.chunk.js",
+    "static/css/main.d3146523.chunk.css",
+    "static/js/main.6383a6d8.chunk.js"
+  ]
+}
