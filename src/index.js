@@ -5,6 +5,9 @@ import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
+    <div className="header">
+      <h1>Face mask detection</h1>
+    </div>
     <App />
   </React.StrictMode>,
   document.getElementById('root')
