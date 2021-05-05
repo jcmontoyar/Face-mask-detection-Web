@@ -1,0 +1,59 @@
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+html,
+  body {
+    position: relative;
+    height: 100%;
+    font-family: "Roboto";
+  }
+  
+h1{
+  color: #6e529e;
+  padding-top: 25px;
+  font-weight: 500;
+  padding-bottom: 40px;
+}
+
+h2,h3,h4,h5{
+  font-weight: 400;
+  text-align: justify;
+  text-justify: inter-character;
+  line-height: 1.6;
+}
+
+p{
+  line-height: 2.1;
+  text-align: justify;
+  text-justify: inter-character;
+}
+
+.title{
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color:#6e529e;
+  font-weight: 400;
+  font-size: 35px;
+}
+
+.cardRatingtitle{
+  padding-top: 20px;
+  color:#6e529e;
+  font-weight: 300;
+  font-size: 25px;
+}
+
+
+.App-link {
+  color: #61dafb;
+}
+
+
+
+.alignTextCenter{
+  text-align: center;
+  text-justify: inter-character;
+}
+
