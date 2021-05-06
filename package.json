@@ -1,5 +1,5 @@
 {
-  "homepage": "https://jcmontoyar.github.io/Face-Mask-Detection-Web",
+  "homepage": "https://jcmontoyar.github.io/Face-mask-detection-Web",
   "name": "face-mask-detection",
   "version": "0.1.0",
   "private": true,
@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "bootstrap": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "^4.0.3",
