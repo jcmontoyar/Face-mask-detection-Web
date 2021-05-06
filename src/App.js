@@ -1,5 +1,5 @@
 // Import dependencies
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
 
@@ -10,6 +10,7 @@ const blazeface = require("@tensorflow-models/blazeface");
 const classes = ["Correctly placed", "Poorly placed", "No face mask"];
 
 function App() {
+  const [messgLoading, setMessg] = useState("Loading models");
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -22,14 +23,14 @@ function App() {
       process.env.REACT_APP_MODEL_URL
     );
     const modelFaces = await blazeface.load();
-
+    setMessg("");  
     //  Loop and detect hands
     setInterval(() => {
-      detectFaces(modelFaces, net);
+      detectFacesAndPredict(modelFaces, net);
     }, 16.7);
   };
 
-  const detectFaces = async (modelFaces, net) => {
+  const detectFacesAndPredict = async (modelFaces, net) => {
     // Check data is available
     if (
       typeof webcamRef.current !== "undefined" &&
@@ -51,25 +52,23 @@ function App() {
 
       // Draw mesh
       const ctx = canvasRef.current.getContext("2d");
+
+      // Get tensor with tf.fromPixels and passing the current frame
       const img = tf.browser.fromPixels(video);
 
-      // Pass in an image or video to the model. The model returns an array of
       // bounding boxes, probabilities, and landmarks, one for each detected face.
-
       const returnTensors = false; // Pass in `true` to get tensors back, rather than values.
       const predictions = await modelFaces.estimateFaces(img, returnTensors);
 
+      // We will predict only when one face found
       if (predictions.length > 0 && predictions.length < 2) {
+
+        // Bounding box properties
         const start = predictions[0].topLeft;
         const end = predictions[0].bottomRight;
-        
         const size = [end[0] - start[0], end[1] - start[1]];
 
-        console.log("One face found");
-
         // ------------------ Preprocess image --------------
-        //const slicedImg = tf.browser.fromPixels(ctx.getImageData(start[0]-10, start[1]-10, size[0]+10, size[1]+10));
-
         let crop_width = size[0];
         let crop_height = size[1];
 
@@ -82,22 +81,31 @@ function App() {
         if (crop_height > img.shape[0] - start[1]){
             crop_height =  img.shape[0] - start[1];
         }
-        console.log(img.shape)
-        console.log(size)
-        console.log(start)
 
-        var slicedImg = img.slice([start[1]-30, start[0]], [Math.round(crop_height)+30,Math.round(crop_width)]);
+        // Slice the image using tf.slice. We make the bounding box a bit bigger since the face masks usually make the face look bigger.
+        // Also de bounding box of the blazeface model skips the top of the head and the model trained had this part of the head in most images
+        const slicedImg = img.slice([start[1]-30, start[0]], [Math.round(crop_height)+30,Math.round(crop_width)]);
+
+        // Resize and normalize  to the same training dimensions used
         const resized = tf.image
           .resizeBilinear(slicedImg, [224, 224])
           .div(tf.scalar(255));
+        
+        // Cast to the same data type you preprocessed your images when training the model
         const cast = tf.cast(resized, "float32");
+
+        // Expand dimensions to match the following shape (224, 224, 3) this is the shape of the images used in training
         const expanded = cast.expandDims(0);
+
+        // Get the prediction
         const pred = net.predict(expanded).dataSync();
 
+        // Get the predicted label (higher confidence)
         let fc = pred[0];
         let fp = pred[1];
         let nf = pred[2];
 
+        // Get colors and predicted label
         let color = "red";
         let text = "";
         let value = 1.0;
@@ -116,18 +124,16 @@ function App() {
         }
 
        
-
+        // Draw the bounding box given the predicted label
         requestAnimationFrame(() => {
-          // Render a rectangle over each detected face.
+
           // Set styling
           ctx.strokeStyle = color;
           ctx.lineWidth = 10;
           ctx.fillStyle = "white";
           ctx.font = "40px Arial";
-          //
-   
-          //
-  
+     
+          // Create rectangle
           ctx.beginPath();
           ctx.fillText(
             text + " - " + Math.round(value * 100) / 100,
@@ -145,6 +151,7 @@ function App() {
         tf.dispose(resized);
         tf.dispose(cast);
         tf.dispose(expanded);
+        tf.dispose(slicedImg);
       }
 
       tf.dispose(img);
@@ -157,7 +164,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
+  
         <Webcam
           ref={webcamRef}
           muted={true}
@@ -188,7 +195,7 @@ function App() {
             height: 224,
           }}
         />
-      </header>
+      <p className="text-center">{messgLoading}</p>
     </div>
   );
 }
